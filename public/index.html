@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>資料輸入測試</title>
+</head>
+<body>
+    <h1>輸入資料到資料庫</h1>
+    <form id="dataForm">
+        <label for="username">姓名：</label>
+        <input type="text" id="username" name="username" required><br><br>
+
+        <label for="email">電子郵件：</label>
+        <input type="email" id="email" name="email" required><br><br>
+        
+
+        <button type="submit">送出</button>
+    </form>
+
+    <p id="response"></p>
+
+    <script>
+        document.getElementById('dataForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); // 防止表單提交後刷新頁面
+
+            // 收集表單數據
+            const formData = {
+                username: document.getElementById('username').value,  // 修改為 'username'
+                email: document.getElementById('email').value
+            };
+
+            // 發送數據到伺服器
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                const result = await response.json();
+                document.getElementById('response').innerText = result.message;
+            } catch (error) {
+                document.getElementById('response').innerText = '發生錯誤，請稍後再試！';
+                console.error('錯誤：', error);
+            }
+        });
+    </script>
+</body>
+</html>
